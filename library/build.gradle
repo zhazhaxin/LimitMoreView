@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-
 android {
     compileSdkVersion 23
     buildToolsVersion "24.0.0"
@@ -22,10 +21,31 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile 'com.android.support:appcompat-v7:24.1.0'
-    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:support-annotations:23.0.0'
 }
+
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'limit_more_view'
+
+    publishedGroupId = 'cn.Lemon'
+    artifact = 'limitmoreview'
+    libraryVersion = '0.1.0'
+
+    siteUrl = 'https://github.com/llxdaxia/LimitMoreView'
+    gitUrl = 'https://github.com/llxdaxia/LimitMoreView.git'
+
+    libraryName = 'LimitMoreView'
+    libraryDescription = 'some views for list,but less than screen'
+
+    developerId = 'Lemon'
+    developerName = 'Lemon'
+    developerEmail = 'daxiallx@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+apply from: 'https://raw.githubusercontent.com/llxdaxia/GradleScript/master/install_v1.gradle'
+apply from: 'https://raw.githubusercontent.com/llxdaxia/GradleScript/master/bintray_v1.gradle'
+

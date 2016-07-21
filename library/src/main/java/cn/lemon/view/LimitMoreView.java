@@ -66,7 +66,7 @@ public class LimitMoreView extends LinearLayout {
             addAllViewItem();
         }
     }
-    
+
     public void destroy() {
         EventAwake.getInstance().unRegisterEvent(this);
     }
