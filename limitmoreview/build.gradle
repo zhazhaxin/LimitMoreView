@@ -26,16 +26,16 @@ dependencies {
 
 ext {
     bintrayRepo = 'maven'
-    bintrayName = 'limit_more_view'
+    bintrayName = 'limit-more-view'
 
     publishedGroupId = 'cn.Lemon'
-    artifact = 'limitmoreview'
+    artifact = 'limitmoreview'  //与module名必须保持一致，踩了好多次坑了
     libraryVersion = '0.1.0'
 
     siteUrl = 'https://github.com/llxdaxia/LimitMoreView'
     gitUrl = 'https://github.com/llxdaxia/LimitMoreView.git'
 
-    libraryName = 'LimitMoreView'
+    libraryName = 'limitmoreview'
     libraryDescription = 'some views for list,but less than screen'
 
     developerId = 'Lemon'
