@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
         return data;
     }
 
-
     class MyAdapter extends Adapter<String> {
 
         public final int TYPE_ONE = 1;
