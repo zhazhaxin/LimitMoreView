@@ -25,19 +25,17 @@ public class LimitMoreView extends LinearLayout {
     public LimitMoreView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         super.setOrientation(VERTICAL);
-        try {
-            EventAwake.getInstance().registerEvent(this, LimitMoreView.class.getMethod("addAllViewItem", (Class<?>[]) null));
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-            Log.e(TAG, e.getMessage());
-        }
     }
 
 
+    /**
+     * 先移除LimitMoreView中现有的view，添加adapter中所有的view
+     */
     public void addAllViewItem() {
         if (mAdapter == null) {
             throw new RuntimeException("Adapter is null");
         }
+        removeAllViews();
         Adapter.ItemView itemView;
         int itemType;
         for (int position = 0; position < mAdapter.getItemCount(); position++) {
@@ -62,12 +60,10 @@ public class LimitMoreView extends LinearLayout {
 
     public void setAdapter(Adapter adapter) {
         mAdapter = adapter;
+        mAdapter.attachView(this);
         if (adapter.getItemCount() != 0) {
             addAllViewItem();
         }
     }
 
-    public void destroy() {
-        EventAwake.getInstance().unRegisterEvent(this);
-    }
 }

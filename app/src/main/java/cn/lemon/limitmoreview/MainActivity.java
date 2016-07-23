@@ -1,8 +1,8 @@
 package cn.lemon.limitmoreview;
 
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
     public List<String> getVirtualData() {
         List<String> data = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 15; i++) {
             data.add("item position : " + i);
         }
         return data;
@@ -42,10 +42,13 @@ public class MainActivity extends AppCompatActivity {
 
         public final int TYPE_ONE = 1;
         public final int TYPE_TWO = 2;
+        public final int TYPE_THREE = 3;
 
         @Override
         public int getItemType(int position) {
-            if (position % 2 == 0) {
+            if (position == getItemCount() - 1) {
+                return TYPE_THREE;
+            } else if (position % 2 == 0) {
                 return TYPE_ONE;
             } else {
                 return TYPE_TWO;
@@ -54,10 +57,13 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public ItemView onCreateItemView(ViewGroup parent, int type) {
-            if (type == TYPE_ONE) {
-                return new MyItemView(parent, R.layout.item);
-            } else {
-                return new TypeItemView(parent, R.layout.item_type);
+            switch (type) {
+                case TYPE_TWO:
+                    return new ButtonItemView(parent);
+                case TYPE_THREE:
+                    return new SwitchItemView(parent);
+                default:
+                    return new TextItemView(parent);
             }
 
         }
@@ -69,12 +75,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    class MyItemView extends Adapter.ItemView<String> {
+    class TextItemView extends Adapter.ItemView<String> {
 
         private TextView mTextView;
 
-        public MyItemView(ViewGroup parent, @LayoutRes int resLayout) {
-            super(parent, resLayout);
+        public TextItemView(ViewGroup parent) {
+            super(parent, R.layout.item_text);
         }
 
         @Override
@@ -88,12 +94,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    class TypeItemView extends Adapter.ItemView<String> {
+    class ButtonItemView extends Adapter.ItemView<String> {
 
         private Button button;
 
-        public TypeItemView(ViewGroup parent, @LayoutRes int resLayout) {
-            super(parent, resLayout);
+        public ButtonItemView(ViewGroup parent) {
+            super(parent, R.layout.item_button);
         }
 
         @Override
@@ -107,9 +113,34 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mLimitMoreView.destroy();
+    class SwitchItemView extends Adapter.ItemView {
+
+        private TextView mTextView;
+
+        public SwitchItemView(ViewGroup parent) {
+            super(parent, R.layout.item_switch);
+        }
+
+        @Override
+        public void onCreateViewAfter() {
+            mTextView = (TextView) findViewById(R.id.sw);
+        }
+
+        @Override
+        public void bindData(Object data) {
+            getView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mTextView.getText().toString().equals("打开")) {
+                        mAdapter.setVisibility(3,14,View.GONE);
+                        mTextView.setText("关闭");
+                    } else {
+                        mAdapter.setVisibility(3,14,View.VISIBLE);
+                        mTextView.setText("打开");
+                    }
+                }
+            });
+        }
     }
+
 }

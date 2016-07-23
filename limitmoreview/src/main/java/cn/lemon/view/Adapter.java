@@ -19,36 +19,56 @@ public abstract class Adapter<T> {
     private final String TAG = "Adapter";
     private List<T> mData;
     private int count = 0;
+    private LimitMoreView mView;
+
+    public void attachView(LimitMoreView v) {
+        mView = v;
+    }
 
     public void addAll(List<T> data) {
         mData = data;
         count += data.size();
-        EventAwake.getInstance().notifyChange();
+        mView.addAllViewItem();
     }
 
     public void addAll(T[] data) {
         this.addAll(Arrays.asList(data));
+        count--;
     }
 
     public void add(T data) {
         mData.add(data);
         count++;
-        EventAwake.getInstance().notifyChange();
+        mView.addView(onCreateItemView(mView, 0).mView);
     }
 
-    public void remove(int position){
+    public void remove(int position) {
         mData.remove(position);
-        EventAwake.getInstance().notifyChange();
+        count--;
+        mView.removeViewAt(position);
     }
 
-    public void remove(T object){
+    public void remove(int start, int end) {
+        count = count - end + start;
+        mView.removeViews(start, end - start);
+    }
+
+    public void remove(T object) {
+        mView.removeViewAt(mData.indexOf(object));
         mData.remove(object);
-        EventAwake.getInstance().notifyChange();
+        count--;
     }
 
-    public void insert(T object, int position){
-        mData.add(position,object);
-        EventAwake.getInstance().notifyChange();
+    public void insert(T object, int position) {
+        mData.add(position, object);
+        count++;
+        mView.addAllViewItem();
+    }
+
+    public void setVisibility(int start, int end, int visibility){
+        for (int i = start; i < end; i ++){
+            mView.getChildAt(i).setVisibility(visibility);
+        }
     }
 
 
