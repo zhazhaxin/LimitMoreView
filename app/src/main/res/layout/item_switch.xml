@@ -3,9 +3,10 @@
     android:id="@+id/sw"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="16dp"
     android:background="@color/colorAccent"
     android:gravity="center_horizontal"
     android:padding="8dp"
-    android:text="打开"
+    android:text="收起"
     android:textColor="@android:color/white"
     android:textSize="16sp" />

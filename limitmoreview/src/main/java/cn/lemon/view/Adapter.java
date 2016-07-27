@@ -1,5 +1,9 @@
 package cn.lemon.view;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.view.LayoutInflater;
@@ -20,6 +24,11 @@ public abstract class Adapter<T> {
     private List<T> mData;
     private int count = 0;
     private LimitMoreView mView;
+    private Handler mHandler;
+
+    public Adapter() {
+        mHandler = new Handler(Looper.getMainLooper());
+    }
 
     public void attachView(LimitMoreView v) {
         mView = v;
@@ -65,12 +74,78 @@ public abstract class Adapter<T> {
         mView.addAllViewItem();
     }
 
-    public void setVisibility(int start, int end, int visibility){
-        for (int i = start; i < end; i ++){
-            mView.getChildAt(i).setVisibility(visibility);
+    public void setVisibility(int start, int end, final int visibility) {
+        if(end > getItemCount() || start < 0){
+            throw new IllegalAccessError("start must more than 0 and end must less than view count");
         }
-    }
+        if (visibility == View.VISIBLE) {
+            for (int i = start; i < end; i++) {
+                final View view  = mView.getChildAt(i);
+                final ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationX",-Util.getScreenWidth(),0f);
+                animator.setDuration(300);
+                animator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        view.setVisibility(visibility);
+                    }
 
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        animator.start();
+                    }
+                }, 100 * (i - start));
+            }
+        } else if (visibility == View.GONE) {
+            for (int i = end - 1; i >= start; i--) {
+                final View view = mView.getChildAt(i);
+                final ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationX", -Util.getScreenWidth());
+                animator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        view.setVisibility(visibility);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        animator.start();
+                    }
+                }, 100 * (end - i - 1));
+            }
+        }
+
+    }
 
     public int getItemCount() {
         return count;

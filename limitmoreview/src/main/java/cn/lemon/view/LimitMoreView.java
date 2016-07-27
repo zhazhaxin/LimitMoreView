@@ -1,5 +1,6 @@
 package cn.lemon.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -25,6 +26,7 @@ public class LimitMoreView extends LinearLayout {
     public LimitMoreView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         super.setOrientation(VERTICAL);
+        Util.initialize((Activity) context);
     }
 
 

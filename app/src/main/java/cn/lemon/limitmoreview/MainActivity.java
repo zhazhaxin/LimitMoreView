@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
     public List<String> getVirtualData() {
         List<String> data = new ArrayList<>();
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < 10; i++) {
             data.add("item position : " + i);
         }
         return data;
@@ -131,12 +131,12 @@ public class MainActivity extends AppCompatActivity {
             getView().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mTextView.getText().toString().equals("打开")) {
-                        mAdapter.setVisibility(3,14,View.GONE);
-                        mTextView.setText("关闭");
-                    } else {
-                        mAdapter.setVisibility(3,14,View.VISIBLE);
+                    if (mTextView.getText().toString().equals("收起")) {
+                        mAdapter.setVisibility(3,9,View.GONE);
                         mTextView.setText("打开");
+                    } else {
+                        mAdapter.setVisibility(3,9,View.VISIBLE);
+                        mTextView.setText("收起");
                     }
                 }
             });
