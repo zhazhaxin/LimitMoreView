@@ -9,4 +9,4 @@
  与ListView相似的API，用来解决这个问题。
 
  - demo
- ![](../demo.png)
+ ![](./demo.png)
