@@ -9,4 +9,4 @@
  与ListView相似的API，用来解决这个问题。
 
  - demo
- ![](./demo.png)
+<image src="demo.png" width="320" height="564">
