@@ -1,7 +1,5 @@
 package cn.lemon.view;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.view.LayoutInflater;
@@ -13,6 +11,7 @@ import java.util.List;
 
 
 /**
+ * API与RecyclerView.Adapter类似
  * Created by linlongxin on 2016/7/21.
  */
 
@@ -22,11 +21,6 @@ public abstract class Adapter<T> {
     private List<T> mData;
     private int count = 0;
     private LimitMoreView mView;
-    private Handler mHandler;
-
-    public Adapter() {
-        mHandler = new Handler(Looper.getMainLooper());
-    }
 
     public void attachView(LimitMoreView v) {
         mView = v;
