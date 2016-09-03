@@ -5,7 +5,7 @@
   与RecyclerView相似的API
 
 ```
-    complie 'cn.Lemon:limitmoreview:0.1.1'
+    complie 'cn.Lemon:limitmoreview:0.1.3'
 ```
 
 ##使用
@@ -76,6 +76,11 @@ class MyAdapter extends Adapter<String> {
             mTextView.setText(data);
         }
     }
+```
+
+##其他依赖库
+```
+compile 'com.android.support:support-annotations:23.0.0'
 ```
 
  - demo

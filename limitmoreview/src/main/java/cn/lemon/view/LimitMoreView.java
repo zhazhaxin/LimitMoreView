@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 /**
+ * 针对数据列表不足一屏
  * Created by linlongxin on 2016/7/21.
  */
 
@@ -20,6 +21,8 @@ public class LimitMoreView extends LinearLayout {
     private final String TAG = "LimitMoreView";
     private Handler mHandler;
     private Adapter mAdapter;
+    private View mChildView;
+    private int mVisible;
 
     public LimitMoreView(Context context) {
         this(context, null, 0);
@@ -32,7 +35,6 @@ public class LimitMoreView extends LinearLayout {
     public LimitMoreView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         super.setOrientation(VERTICAL);
-        Util.initialize((Activity) context);
         mHandler = new Handler(Looper.getMainLooper());
     }
 
@@ -76,41 +78,18 @@ public class LimitMoreView extends LinearLayout {
     }
 
     /**
-     * 设置多个子view的VISIBILITY
-     * @param start
-     * @param end
-     * @param visibility
+     * 设置多个子view的VISIBILITY,position从0开始，star包括在内，end不包括在内
      */
-    public void setVisibility(int start, int end, final int visibility){
-        if(end > mAdapter.getItemCount() || start < 0){
+    public void setVisibility(int start, int end, final int visibility) {
+        if (end > mAdapter.getItemCount() || start < 0) {
             throw new IllegalAccessError("start must more than 0 and end must less than view count");
         }
+        mVisible = visibility;
         if (visibility == View.VISIBLE) {
             for (int i = start; i < end; i++) {
-                final View view  = getChildAt(i);
-                final ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationX",-Util.getScreenWidth(),0f);
-                animator.setDuration(300);
-                animator.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                        view.setVisibility(visibility);
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-
-                    }
-                });
+                final View view = getChildAt(i);
+                final ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationX", -getScreenWidth((Activity) getContext()), 0f);
+                animator.addListener(new VisibleListener(view));
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -121,28 +100,8 @@ public class LimitMoreView extends LinearLayout {
         } else if (visibility == View.GONE) {
             for (int i = end - 1; i >= start; i--) {
                 final View view = getChildAt(i);
-                final ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationX", -Util.getScreenWidth());
-                animator.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        view.setVisibility(visibility);
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-
-                    }
-                });
+                final ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationX", -getScreenWidth((Activity) getContext()));
+                animator.addListener(new VisibleListener(view));
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -153,4 +112,41 @@ public class LimitMoreView extends LinearLayout {
         }
     }
 
+    //屏幕宽度
+    public static int getScreenWidth(Activity activity) {
+        return activity.getWindowManager().getDefaultDisplay().getWidth();
+    }
+
+    class VisibleListener implements Animator.AnimatorListener {
+
+        private View mView;
+
+        public VisibleListener(View mView) {
+            this.mView = mView;
+        }
+
+        @Override
+        public void onAnimationStart(Animator animation) {
+            if (mVisible == View.VISIBLE) {
+                mView.setVisibility(View.VISIBLE);
+            }
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animation) {
+            if (mVisible == View.GONE) {
+                mView.setVisibility(View.GONE);
+            }
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationRepeat(Animator animation) {
+
+        }
+    }
 }
